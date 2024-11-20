@@ -41,7 +41,9 @@ interface ProductInfoByIdentifierInterface
     public function forModificationConst(ProductModificationConst|string|null $modificationConst): self;
 
     /**
-     * Метод возвращает количество продуктов (остаток) по его уникальным идентификаторам
+     * Метод возвращает информацию о продукте по его уникальным идентификаторам:
+     * - остаток
+     * - артикул
      *
      * @return array{
      *  'product_quantity': int,

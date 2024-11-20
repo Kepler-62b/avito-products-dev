@@ -40,14 +40,14 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 final readonly class GetCreatedOrderForUpdateAvitoProductStockHandler
 {
     public function __construct(
+        private MessageDispatchInterface $messageDispatch,
+        private AllUserProfilesByActiveTokenInterface $allUserProfilesByActiveToken,
         private CurrentOrderEventInterface $currentOrderEvent,
         private CurrentProductIdentifierInterface $currentProductIdentifier,
-        private AllUserProfilesByActiveTokenInterface $allUserProfilesByActiveToken,
-        private MessageDispatchInterface $messageDispatch
     ) {}
 
     /**
-     * При поступлении заказа - обновляем остатки товара в объявлении на Авито
+     * При поступлении нового заказа и изменении остатков на товар - обновляем остатки товара в объявлении на Авито
      */
     public function __invoke(OrderMessage $message): void
     {
@@ -99,7 +99,7 @@ final readonly class GetCreatedOrderForUpdateAvitoProductStockHandler
 
                 $this->messageDispatch->dispatch(
                     message: $updateAvitoProductStockMessage,
-                    stamps: [new MessageDelay('5 seconds')], // задержка 5 сек для обновления карточки
+                    stamps: [new MessageDelay('5 seconds')], // задержка 5 сек для обновления остатков в объявлении на Авито
                     transport: (string) $profile
                 );
             }

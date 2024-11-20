@@ -94,7 +94,7 @@ final class UpdateAvitoProductStockRequest extends AvitoApi
 
         if(false === $this->externalId)
         {
-            throw new InvalidArgumentException('Не передан обязательны параметр запроса: externalId');
+            throw new InvalidArgumentException('Не передан параметр запроса: externalId');
         }
 
         $response = $this->TokenHttpClient()
@@ -116,7 +116,8 @@ final class UpdateAvitoProductStockRequest extends AvitoApi
 
         if($response->getStatusCode() !== 200)
         {
-            $this->logger->critical('avito-products:Ошибка обновления остатков',
+            $this->logger->critical(
+                sprintf('avito-products: Не удалось обновить остатки для объявления %s', $this->itemId),
                 [
                     __FILE__.':'.__LINE__,
                     $result,

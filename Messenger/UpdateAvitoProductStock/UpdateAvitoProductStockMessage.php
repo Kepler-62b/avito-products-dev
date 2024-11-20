@@ -34,79 +34,36 @@ use BaksDev\Users\Profile\UserProfile\Type\Id\UserProfileUid;
 
 final readonly class UpdateAvitoProductStockMessage
 {
-    private UserProfileUid $profile;
-
-    private ProductUid $product;
-
-    private ProductOfferConst|null $offer;
-
-    private ProductVariationConst|null $variation;
-
-    private ProductModificationConst|null $modification;
-
     public function __construct(
-        UserProfileUid|string $profile,
-        ProductUid|string $product,
-        ProductOfferConst|string|null $offer,
-        ProductVariationConst|string|null $variation,
-        ProductModificationConst|string|null $modification,
-    )
-    {
-        if(is_string($profile))
-        {
-            $profile = new UserProfileUid($profile);
-        }
-
-        if(is_string($product))
-        {
-            $product = new ProductUid($product);
-        }
-
-        if(is_string($offer))
-        {
-            $offer = new ProductOfferConst($offer);
-        }
-
-        if(is_string($variation))
-        {
-            $variation = new ProductVariationConst($variation);
-        }
-
-        if(is_string($modification))
-        {
-            $modification = new ProductModificationConst($modification);
-        }
-
-        $this->profile = $profile;
-
-        $this->product = $product;
-        $this->offer = $offer;
-        $this->variation = $variation;
-        $this->modification = $modification;
-    }
+        private string $profile,
+        private string $product,
+        private string|null $offer,
+        private string|null $variation,
+        private string|null $modification,
+    ) {}
 
     public function getProfile(): UserProfileUid
     {
-        return $this->profile;
+        return new UserProfileUid($this->profile);
     }
 
     public function getProduct(): ProductUid
     {
-        return $this->product;
+        return new ProductUid($this->product);
     }
 
     public function getOfferConst(): ?ProductOfferConst
     {
-        return $this->offer;
+        return $this->offer ? new ProductOfferConst($this->offer) : null;
     }
 
     public function getVariationConst(): ?ProductVariationConst
     {
-        return $this->variation;
+        return $this->offer ? new ProductVariationConst($this->variation) : null;
     }
 
     public function getModificationConst(): ?ProductModificationConst
     {
-        return $this->modification;
+        return $this->offer ? new ProductModificationConst($this->modification) : null;
     }
 }

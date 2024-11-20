@@ -37,10 +37,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-/** Обновляет остатки продукции на Avito */
+/** Обновляет остатки продукции в объявлениях на Avito */
 #[AsCommand(
     name: 'avito-products:stocks:update',
-    description: 'Обновляет остатки продукции на Avito'
+    description: 'Обновляет остатки продукции в объявлениях на Avito'
 )]
 class UpdateAvitoProductStocksCommand extends Command
 {
@@ -64,11 +64,10 @@ class UpdateAvitoProductStocksCommand extends Command
     {
         $this->io = new SymfonyStyle($input, $output);
 
-        /** Получаем активные токены авторизации профилей Yandex Market */
+        /**  */
         $profiles = $this
             ->allProfilesByToken
             ->findProfilesByActiveToken();
-
 
         $profiles = iterator_to_array($profiles);
 
@@ -124,26 +123,27 @@ class UpdateAvitoProductStocksCommand extends Command
 
     private function update(UserProfileUid $profile, ?string $article = null): void
     {
-        /** Получаем продукты, на которые есть маппер Avito*/
-        $this->allProductsWithAvitoMapper
-            ->profile($profile);
+        $this->io->note(sprintf('Обновляем остатки у объявлений на Авито у профиля: %s', $profile->getAttr()));
 
+        /** Ищем соответствие по артикулу или его части */
         if(true === is_string($article))
         {
             $this->allProductsWithAvitoMapper->byArticle($article);
         }
 
-        $avitoProducts = $this->allProductsWithAvitoMapper->findAll();
+        /** Получаем продукты, на которые есть маппер Avito*/
+        $avitoProducts = $this->allProductsWithAvitoMapper
+            ->profile($profile)
+            ->findAll();
 
-        if($avitoProducts === false)
+        if(false === $avitoProducts)
         {
-            $this->io->warning('Не найдено продуктов для обновления остатков в объявлениях на Авито');
+            $this->io->warning('Не найдено продукты для обновления остатков в объявлениях на Авито');
             return;
         }
 
         foreach($avitoProducts as $product)
         {
-
             $updateAvitoProductStockMessage = new UpdateAvitoProductStockMessage(
                 $profile,
                 $product['product_id'],
@@ -152,6 +152,7 @@ class UpdateAvitoProductStocksCommand extends Command
                 $product['product_modification_const']);
 
             $this->messageDispatch->dispatch($updateAvitoProductStockMessage);
+            $this->io->text(sprintf('Обновили остатки у объявлений на Авито %s', $avitoProducts['article']));
         }
     }
 }

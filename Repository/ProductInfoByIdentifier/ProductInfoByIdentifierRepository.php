@@ -136,7 +136,9 @@ final class ProductInfoByIdentifierRepository implements ProductInfoByIdentifier
     }
 
     /**
-     * Метод возвращает количество продуктов (остаток) и артикул по его уникальным идентификаторам
+     * Метод возвращает информацию о продукте по его уникальным идентификаторам:
+     * - остаток
+     * - артикул
      *
      * @return array{
      *     'product_quantity': int,
@@ -183,7 +185,7 @@ final class ProductInfoByIdentifierRepository implements ProductInfoByIdentifier
         if($this->offerConst instanceof ProductOfferConst)
         {
             $dbal
-                ->leftJoin(
+                ->join(
                     'product',
                     ProductOffer::class,
                     'product_offer',
@@ -195,7 +197,7 @@ final class ProductInfoByIdentifierRepository implements ProductInfoByIdentifier
         else
         {
             $dbal
-                ->join(
+                ->leftJoin(
                     'product',
                     ProductOffer::class,
                     'product_offer',

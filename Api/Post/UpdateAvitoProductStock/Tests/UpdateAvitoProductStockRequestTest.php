@@ -51,8 +51,8 @@ final class UpdateAvitoProductStockRequestTest extends KernelTestCase
 
     public function testToken(): void
     {
-        self::assertTrue(true);
-        return;
+//        self::assertTrue(true);
+//        return;
 
         /** @var GetIdByArticleRequest $getIdByArticleRequest */
         $getIdByArticleRequest = static::getContainer()->get(GetIdByArticleRequest::class);
@@ -60,7 +60,6 @@ final class UpdateAvitoProductStockRequestTest extends KernelTestCase
 
         //  Triangle PL01 225/55 R17 101R
         $identifier = $getIdByArticleRequest->find('PL01-17-225-55-101R');
-        dd($identifier);
 
         /** @var UpdateAvitoProductStockRequest $updateAvitoProductsStockRequest */
         $updateAvitoProductsStockRequest = static::getContainer()->get(UpdateAvitoProductStockRequest::class);

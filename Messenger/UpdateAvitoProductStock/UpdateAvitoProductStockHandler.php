@@ -50,7 +50,7 @@ final readonly class UpdateAvitoProductStockHandler
     }
 
     /**
-     * Метод обновляет остатки у объявления на Авито
+     * Метод отправляет запрос Avito API на обновление остатков у объявления
      */
     public function __invoke(UpdateAvitoProductStockMessage $message): void
     {
@@ -62,7 +62,7 @@ final readonly class UpdateAvitoProductStockHandler
             ->forModificationConst($message->getModificationConst())
             ->findAll();
 
-        $article =$product['product_article'];
+        $article = $product['product_article'];
 
         /** Получаем идентификатор объявления по артикулу */
         $identifier = $this->getIdByArticleRequest
@@ -78,6 +78,9 @@ final readonly class UpdateAvitoProductStockHandler
 
             return;
         }
+
+        /** Задержка перед выполнением запроса на обновление остатков - максимальное количество запросов в минуту: 500 */
+        usleep(100000);
 
         $updateStock = $this->updateAvitoProductStockRequest
             ->profile($message->getProfile())

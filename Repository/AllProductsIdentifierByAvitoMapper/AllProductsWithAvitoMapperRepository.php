@@ -458,26 +458,26 @@ final class AllProductsWithAvitoMapperRepository
             $dbal->andWhere('
             (
                  CASE
-				   WHEN product_modification.article = :modification_article
+				   WHEN product_modification.article LIKE :modification_article
 				   THEN product_modification.article
 				   
-				   WHEN product_modification.article = :variation_article
+				   WHEN product_modification.article LIKE :variation_article
 				   THEN product_variation.article
 				   
-				   WHEN product_modification.article = :offer_article
+				   WHEN product_modification.article LIKE :offer_article
 				   THEN product_offer.article
 				   
-				   WHEN product_modification.article = :product_article
+				   WHEN product_modification.article LIKE :product_article
 				   THEN product_info.article
 				   
 				   ELSE NULL
                 END
             ) IS NOT NULL
         ')
-                ->setParameter('modification_article', $this->article)
-                ->setParameter('variation_article', $this->article)
-                ->setParameter('offer_article', $this->article)
-                ->setParameter('product_article', $this->article);
+                ->setParameter('modification_article', "%".$this->article."%")
+                ->setParameter('variation_article', "%".$this->article."%")
+                ->setParameter('offer_article', "%".$this->article."%")
+                ->setParameter('product_article', "%".$this->article."%");
         }
 
         return $dbal
